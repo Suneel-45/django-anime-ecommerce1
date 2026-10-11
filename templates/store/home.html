@@ -1,0 +1,26 @@
+{% extends "store/base.html" %}
+{% block title %}Shop — Cartify{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-content">
+    <div><span class="eyebrow">THE EVERYDAY EDIT</span><h1>Good finds.<br><span>Better living.</span></h1><p>Thoughtful essentials for your everyday life, all in one place.</p><a href="#products" class="button button-light">Explore products <span>→</span></a></div>
+    <div class="hero-art"><div class="hero-circle"></div><img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=900&q=85" alt="Featured sneakers" class="hero-image"><div class="floating-note">Made for your<br><strong>everyday.</strong></div></div>
+  </div>
+</section>
+<section class="container product-section" id="products">
+  <div class="section-heading"><div><span class="eyebrow">OUR COLLECTION</span><h2>{% if query %}Search results{% else %}Shop the essentials{% endif %}</h2></div><span class="muted">{{ products|length }} product{{ products|length|pluralize }}</span></div>
+  {% if products %}
+  <div class="product-grid">
+    {% for product in products %}
+    <article class="product-card">
+      <a class="product-image-link" href="{% url 'product_detail' product.id %}">
+        {% if product.image_url %}<img class="product-image" src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">{% else %}<div class="image-placeholder">Cartify</div>{% endif %}
+        <span class="category-tag">{{ product.category }}</span>
+      </a>
+      <div class="product-info"><a class="product-name" href="{% url 'product_detail' product.id %}">{{ product.name }}</a><div class="product-bottom"><strong class="price">₹{{ product.price }}</strong><form method="post" action="{% url 'cart_add' product.id %}">{% csrf_token %}<input type="hidden" name="next" value="home"><button class="add-button" type="submit" aria-label="Add {{ product.name }} to cart">+</button></form></div></div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}<div class="empty-state"><div class="empty-icon">⌕</div><h3>No products found</h3><p>Try a different search term.</p><a class="button button-dark" href="{% url 'home' %}">Clear search</a></div>{% endif %}
+</section>
+{% endblock %}

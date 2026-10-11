@@ -1,0 +1,14 @@
+{% extends "store/base.html" %}
+{% block title %}{{ product.name }} — Cartify{% endblock %}
+{% block content %}
+<section class="container detail-section">
+  <a href="{% url 'home' %}" class="back-link">← Back to shop</a>
+  <div class="detail-grid">
+    <div class="detail-image-wrap">{% if product.image_url %}<img class="detail-image" src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<div class="image-placeholder">Cartify</div>{% endif %}</div>
+    <div class="detail-copy"><span class="eyebrow">{{ product.category }}</span><h1>{{ product.name }}</h1><div class="detail-price">₹{{ product.price }}</div><p class="detail-description">{{ product.description }}</p><p class="stock-line">{% if product.stock > 0 %}<span class="stock-dot"></span> In stock · {{ product.stock }} available{% else %}<span class="stock-dot out"></span> Currently out of stock{% endif %}</p>
+      {% if product.stock > 0 %}<form method="post" action="{% url 'cart_add' product.id %}">{% csrf_token %}<input type="hidden" name="next" value="cart"><button class="button button-dark button-wide" type="submit">Add to cart <span>→</span></button></form>{% endif %}
+      <div class="detail-benefits"><div><span>↗</span><p><strong>Easy checkout</strong><br><small>Simple and secure demo flow</small></p></div><div><span>♡</span><p><strong>Everyday quality</strong><br><small>Useful finds, thoughtfully picked</small></p></div></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

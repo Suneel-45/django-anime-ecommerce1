@@ -1,0 +1,5 @@
+{% extends "store/base.html" %}
+{% block title %}Log in — Cartify{% endblock %}
+{% block content %}
+<section class="auth-section container"><div class="auth-card"><span class="eyebrow">WELCOME BACK</span><h1>Log in</h1><p class="muted">Good to see you again.</p><form method="post">{% csrf_token %}{% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}{% for field in form %}<div class="form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}</div>{% endfor %}<input type="hidden" name="next" value="{{ next }}"><button class="button button-dark button-wide" type="submit">Log in <span>→</span></button></form><p class="auth-switch">New to Cartify? <a href="{% url 'register' %}">Create an account</a></p></div></section>
+{% endblock %}

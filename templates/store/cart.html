@@ -1,0 +1,17 @@
+{% extends "store/base.html" %}
+{% block title %}Your cart — Cartify{% endblock %}
+{% block content %}
+<section class="container page-section">
+  <div class="section-heading"><div><span class="eyebrow">ALMOST YOURS</span><h1>Your shopping cart</h1></div><a class="back-link" href="{% url 'home' %}">Continue shopping →</a></div>
+  {% if items %}
+  <div class="cart-layout"><div class="cart-items">
+    {% for item in items %}<article class="cart-item">
+      <a href="{% url 'product_detail' item.product.id %}" class="cart-thumb">{% if item.product.image_url %}<img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">{% endif %}</a>
+      <div class="cart-item-main"><a class="product-name" href="{% url 'product_detail' item.product.id %}">{{ item.product.name }}</a><span class="muted">{{ item.product.category }}</span><strong>₹{{ item.product.price }}</strong>
+        <div class="cart-actions"><form method="post" action="{% url 'cart_update' item.product.id %}" class="quantity-form">{% csrf_token %}<label for="qty-{{ item.product.id }}">Qty</label><input id="qty-{{ item.product.id }}" name="quantity" type="number" min="0" max="{{ item.product.stock }}" value="{{ item.quantity }}"><button type="submit" class="text-button">Update</button></form><form method="post" action="{% url 'cart_remove' item.product.id %}">{% csrf_token %}<button type="submit" class="text-button danger-text">Remove</button></form></div>
+      </div><strong class="line-total">₹{{ item.line_total }}</strong>
+    </article>{% endfor %}
+  </div><aside class="summary-card"><h2>Order summary</h2><div class="summary-line"><span>Subtotal</span><span>₹{{ total }}</span></div><div class="summary-line"><span>Shipping</span><span class="free-label">Free</span></div><div class="summary-line total-line"><strong>Total</strong><strong>₹{{ total }}</strong></div><a class="button button-dark button-wide" href="{% url 'checkout' %}">Continue to checkout <span>→</span></a><p class="summary-note">Demo checkout only. No payment will be collected.</p></aside></div>
+  {% else %}<div class="empty-state"><div class="empty-icon">♡</div><h2>Your cart is waiting</h2><p>Looks like you haven't added anything yet.</p><a href="{% url 'home' %}" class="button button-dark">Start shopping</a></div>{% endif %}
+</section>
+{% endblock %}
